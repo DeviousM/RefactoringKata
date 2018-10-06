@@ -75,13 +75,15 @@ function computeQualityDegradationMultiplier(item) {
  */
 function computeBackstagePassQuality(item) {
   const { sellIn, quality } = item;
+  const multiplier = computeQualityDegradationMultiplier(item);
+
   if (hasSellTimePassed(item))
     return MIN_QUALITY;
   if (sellIn <= 5)
-    return quality + 3;
+    return quality + 3 * multiplier;
   if (sellIn <= 10)
-    return quality + 2;
-  return quality + 1;
+    return quality + 2 * multiplier;
+  return quality + 1 * multiplier;
 }
 
 /* 
@@ -127,8 +129,8 @@ class Shop {
    * Updates singular item
    */
   _updateItem = (item) => {
-    item.quality = this._computeNewQuality(item);
     item.sellIn = this._computeNewSellInTime(item);
+    item.quality = this._computeNewQuality(item);
   }
 
   /**
